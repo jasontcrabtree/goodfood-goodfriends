@@ -5,7 +5,13 @@ const cors = require('cors');
 const app = express();
 const db = require('./queries');
 
-const port = 3001;
+const port = 3020;
+
+// let port = process.env.PORT;
+// if (port == null || port == "") {
+//   port = 8000;
+// }
+// app.listen(port);
 
 app.use(cors());
 
@@ -34,5 +40,5 @@ app.put('/users/:id', db.updateUser);
 app.delete('/users/:id', db.deleteUser);
 
 app.listen(port, () => {
-  console.log(`App running on port ${port}`);
+  console.log(`App running on port http://localhost:${port}`);
 });
