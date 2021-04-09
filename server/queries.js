@@ -2,6 +2,7 @@
 $1, $2 ... is a variable placeholder in PostgreSQL
 */
 const { Pool } = require('pg');
+const { Client } = require('pg');
 
 const pool = new Pool({
   user: 'me',
@@ -10,6 +11,26 @@ const pool = new Pool({
   password: 'password',
   port: 5432,
 });
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
+
+client.connect();
+
+client.query(
+  'SELECT table_schema,table_name FROM information_schema.tables;',
+  (err, res) => {
+    if (err) throw err;
+    for (const row of res.rows) {
+      console.log(JSON.stringify(row));
+    }
+    client.end();
+  }
+);
 
 // POST (create) A NEW USER
 const createUser = (request, response) => {
@@ -53,7 +74,7 @@ const getUserById = (request, response) => {
 // PUT (update) data in an existing user
 /*
 - The /users/:id endpoint will also take two HTTP requests — the GET we created for getUserById, and also a PUT, to modify an existing user.
-- It is worth noting that PUT is idempotent, meaning the exact same call can be made over and over and will produce the same result. This is different than POST, in which the exact same call repeated will continuously make new users with the same data.
+- PUT is idempotent, meaning the same call can be made over and over with the same outcome. This is different than POST, where the exact same call repeated will make new users with the same data.
  */
 const updateUser = (request, response) => {
   const id = parseInt(request.params.id);
