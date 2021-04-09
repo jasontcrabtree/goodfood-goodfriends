@@ -5,13 +5,10 @@ const cors = require('cors');
 const app = express();
 const db = require('./queries');
 
-const port = 3020;
+// const port = 3020;
 
 // let port = process.env.PORT;
-// if (port == null || port == "") {
-//   port = 8000;
-// }
-// app.listen(port);
+
 
 app.use(cors());
 
@@ -39,6 +36,14 @@ app.post('/users', db.createUser);
 app.put('/users/:id', db.updateUser);
 app.delete('/users/:id', db.deleteUser);
 
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
 app.listen(port, () => {
   console.log(`App running on port http://localhost:${port}`);
 });
+
+// app.listen(port, () => {
+//   console.log(`App running on port http://localhost:${port}`);
+// });
