@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 /*
 $1, $2 ... is a variable placeholder in PostgreSQL
 */
@@ -14,11 +13,11 @@ const pool = new Pool({
 
 // POST (create) A NEW USER
 const createUser = (request, response) => {
-  const { name, email } = request.body;
+  const { name, breakfast } = request.body;
 
   pool.query(
-    'INSERT INTO users (name, email) VALUES ($1, $2)',
-    [name, email],
+    'INSERT INTO users (name, breakfast) VALUES ($1, $2)',
+    [name, breakfast],
     (error, results) => {
       if (error) {
         throw error;

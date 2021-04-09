@@ -1,6 +1,5 @@
 const express = require('express');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
@@ -10,9 +9,16 @@ const port = 3001;
 
 app.use(cors());
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+// app.use(
+//   bodyParser.urlencoded({
+//     extended: true,
+//   })
+// );
+
+app.use(express.json());
 app.use(
-  bodyParser.urlencoded({
+  express.urlencoded({
     extended: true,
   })
 );

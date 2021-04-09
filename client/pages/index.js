@@ -1,68 +1,75 @@
 import React, { useState, useEffect } from 'react';
 
 export default function Home() {
-  const [merchants, setMerchants] = useState(false);
+  const [users, setUsers] = useState(false);
 
-  function getMerchant() {
+  function getUsers() {
     fetch('http://localhost:3001/users')
-      .then((response) => response.text())
-      .then((data) => setMerchants(data));
+      .then((response) => response.json())
+      .then((data) => setUsers(data));
+    // .then((response) => response.text())
+    // .then((data) => setUsers(data));
   }
 
-  function createMerchant() {
+  function createUsers() {
     const name = prompt('Enter merchant name');
-    const email = prompt('Enter merchant email');
+    const breakfast = prompt('Enter merchant breakfast');
 
-    fetch('http://localhost:3001/merchants', {
+    fetch('http://localhost:3001/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, email }),
+      body: JSON.stringify({ name, breakfast }),
     })
       .then((response) => response.text())
       .then((data) => {
         alert(data);
-        getMerchant();
+        getUsers();
       });
   }
 
-  function deleteMerchant() {
+  function deleteUsers() {
     const id = prompt('Enter merchant id');
-    fetch(`http://localhost:3001/merchants/${id}`, {
+    fetch(`http://localhost:3001/users/${id}`, {
       method: 'DELETE',
     })
       .then((response) => response.text())
       .then((data) => {
         alert(data);
-        getMerchant();
+        getUsers();
       });
   }
 
   useEffect(() => {
-    getMerchant();
+    getUsers();
   }, []);
 
-  console.log(merchants);
+  console.log(users);
 
   return (
-    <div>
-      {!merchants ? (
+    <main>
+      {!users ? (
         <p>Loading …</p>
-      ) : merchants.length === 0 ? (
-        <p>No recipes</p>
+      ) : users.length === 0 ? (
+        <p>No names</p>
       ) : (
-        <div>{merchants}</div>
+        <div>
+          {users.map((user, i) => (
+            <div key={i}>
+              {user.name}, {user.breakfast}, {user.drink}
+            </div>
+          ))}
+        </div>
       )}
 
-      <br />
-      <button type="button" onClick={createMerchant}>
+      <button type="button" onClick={createUsers}>
         Add
       </button>
       <br />
-      <button type="button" onClick={deleteMerchant}>
+      <button type="button" onClick={deleteUsers}>
         Delete
       </button>
-    </div>
+    </main>
   );
 }
